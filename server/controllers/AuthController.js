@@ -3,7 +3,10 @@ const UserModel = require("../models/UserModels");
 const bcrypt= require("bcryptjs")
 
 
-async function registerUser(req,res){
+
+module.exports={
+
+   registerUser:async(req,res)=>{
     try {
         const {name,email,password,profileImg}=req.body;
 
@@ -41,9 +44,43 @@ async function registerUser(req,res){
       })
 }
 
+},
+ 
+  //Login as checkemail and then compare password
+
+   checksEmail: async(req,res)=>{
+    try {
+       
+        const {email}=req.body;
+         
+        const checkEmail= await UserModel.findOne({email}).select("-password")  //the password is not included in the returned user data for security reasons
+        if(!checkEmail){
+            return res.status(400).json({
+                message:"Email not found",
+                error: true
+            })
+        }
+
+        return res.status(200).json({
+           message:"email verify",
+           success: true,
+           data: checkEmail
+        })
+        
+        
+    } catch (error) {
+      return res.status(500).json({
+        message: error.message || error,
+        error: true
+         })
+    }
+},
+
+
+
+
+
 }
 
 
 
-
-module.exports= registerUser

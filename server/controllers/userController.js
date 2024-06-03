@@ -59,8 +59,20 @@ module.exports={
             const token= req.cookies.token || ""
 
             const user=await getUserFromUserDetail(token)
+            const {name,profileImg}=req.body;
 
-            
+            const updateUser=await  UserModel.updateOne({_id: user._id},{
+                name,
+                profileImg
+            })
+
+            const updatedUserInfo=await UserModel.findById(user._id)
+
+            return res.status(201).json({
+                message:"user updated succesfully",
+                data: updatedUserInfo,
+                success:true
+            })
 
 
             

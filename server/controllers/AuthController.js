@@ -1,6 +1,7 @@
 const { error } = require("console");
 const UserModel = require("../models/UserModels");
-const bcrypt= require("bcryptjs")
+const bcrypt= require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 
 
@@ -56,10 +57,11 @@ module.exports={
         const checkEmail= await UserModel.findOne({email}).select("-password")  //the password is not included in the returned user data for security reasons
         if(!checkEmail){
             return res.status(400).json({
-                message:"Email not found",
+                message:"user not found",
                 error: true
             })
         }
+        
 
         return res.status(200).json({
            message:"email verify",
@@ -75,6 +77,54 @@ module.exports={
          })
     }
 },
+
+
+verifypassword:async(req,res)=>{
+    try {
+        const {password,userId}=req.body;
+
+        const user=await UserModel.findById(userId)
+        if (!user) {
+            return res.status(404).json({
+                message: "User not found",
+                error: true
+            });
+        }
+
+        const passwordVerify= await bcrypt.compare(password,user.password)
+        if (!passwordVerify) {
+            return res.status(401).json({
+                message: "Invalid password",
+                error: true
+            });
+        }
+
+        const tokenData={
+            id: user._id,
+            email: user.email
+        }
+        const token=await jwt.sign(tokenData,process.env.JWT_SECRET_KET,{expiresIn: '1d'}) //generatesToken
+        const CookieOption={
+            http: true,
+            secure: true,
+        }
+
+        return res.cookie("token",token,CookieOption).status(200).json({
+            message:"Login succesfull",
+            token: token,
+            success: true
+        })
+        
+    } catch (error) {
+        return res.status(500).json({
+            message: error.message || error,
+            error: true
+             })
+    }
+},
+
+
+
 
 
 

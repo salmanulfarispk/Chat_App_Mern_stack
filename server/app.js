@@ -4,12 +4,15 @@ const app=express()
 require('dotenv').config()
 const connectDB=require("./config/DBconnect")
 const PORT=process.env.PORT || 8080
+const Routes=require("./routes/AllRoutes")
 
 app.use(cors({
     origin: process.env.FRONTEND_URL,
     credentials: true
 }))
 
+app.use(express.json())
+app.use("/api/",Routes)
 
 connectDB().then(()=>{
     app.listen(PORT,()=>{

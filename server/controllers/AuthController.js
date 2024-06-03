@@ -103,7 +103,7 @@ verifypassword:async(req,res)=>{
             id: user._id,
             email: user.email
         }
-        const token=await jwt.sign(tokenData,process.env.JWT_SECRET_KET,{expiresIn: '1d'}) //generatesToken
+        const token=await jwt.sign(tokenData,process.env.JWT_SECRET_KEY,{expiresIn: '1d'}) //generatesToken
         const CookieOption={
             http: true,
             secure: true,

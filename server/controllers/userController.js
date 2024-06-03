@@ -1,3 +1,4 @@
+const getUserFromUserDetail = require("../helpers/getUserDetailsFromToken")
 const UserModel = require("../models/UserModels")
 
 
@@ -10,7 +11,14 @@ module.exports={
 
    userDetails: async(req,res)=>{
     try {
-        const token= req.cookies.token
+        const token= req.cookies.token || ""
+
+        const user=await getUserFromUserDetail(token)
+
+        return res.status(200).json({
+            message:"user details",
+            data: user
+        }) 
         
     } catch (error) {
      return res.status(500).json({
@@ -21,6 +29,33 @@ module.exports={
 
    },
 
+
+    //userLogout
+
+    Logout:async(req,res)=>{
+        try {
+
+            const CookieOption={
+                http: true,
+                secure: true,
+            }
+
+            return res.cookie("token","",CookieOption).status(200).json({    //here set token as ""
+                message:"session out ",
+                success: true
+            })
+            
+        } catch (error) {
+         return res.status(500).json({
+            message: error.message || error,
+            error: true
+         })   
+        }
+    },
+
+
+
+    
 
 
 }

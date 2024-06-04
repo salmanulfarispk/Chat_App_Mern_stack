@@ -19,14 +19,15 @@ const Register = () => {
       .email('Invalid email address')
       .required('Email is required'),
     password: Yup.string()
-      .min(6, 'Password must be at least 6 characters')
-      .required('Password is required'),
+      .min(5, 'Password must be at least 5 characters')
+      .required('Password is required')
+      .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/, 'Password must contain uppercase, lowercase, number, and symbol'),
     profileImg: Yup.mixed()
       .nullable()
       .test(
         'fileSize',
         'File too large',
-        value => !value || (value && value.size <= 2 * 1024 * 1024)
+        value => !value || (value && value.size <= 2 * 1024 * 1024)    //value is inputed data in inputfield
       )
       .test(
         'fileType',
@@ -34,6 +35,7 @@ const Register = () => {
         value => !value || (value && ['image/jpeg', 'image/png'].includes(value.type))
       ),
   });
+
 
   const formik = useFormik({
     initialValues: {
@@ -45,13 +47,13 @@ const Register = () => {
     validationSchema,
     onSubmit: async (values) => {
       const URL = `${import.meta.env.VITE_REACT_APP_BACKEND_URL}/api/register`;
-
       try {
         const formData = new FormData();
+
         formData.append('name', values.name);
         formData.append('email', values.email);
         formData.append('password', values.password);
-        
+
         if (values.profileImg) {
           const uploadedPhoto = await uploadFile(values.profileImg);
           if (uploadedPhoto) {
@@ -61,7 +63,11 @@ const Register = () => {
           }
         }
 
-        const response = await axios.post(URL, formData);
+        const response = await axios.post(URL, formData,{
+          headers: {
+            'Content-Type':'application/json'
+          }
+        });
         toast.success(response.data.message);
 
         if (response.data.success) {

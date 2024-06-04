@@ -5,6 +5,7 @@ import Password from "../pages/Password"
 import EmailPage  from "../pages/EmailPage"
 import Home from "../pages/Home"
 import Message from "../components/Message"
+import Authlayout from "../layout/common"
 
 
 
@@ -16,15 +17,15 @@ const router= createBrowserRouter([
         children: [
             {
                 path:"/register",
-                element: <Register/>
+                element: <Authlayout><Register/></Authlayout>
             },
             {
                 path:"/emailpage",
-                element:<EmailPage/>
+                element:<Authlayout><EmailPage/></Authlayout>
             },
             {
                 path:"/passwordpage",
-                element:<Password/>
+                element:<Authlayout><Password/></Authlayout>
             },
             {
                 path:"",

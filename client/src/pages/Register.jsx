@@ -8,6 +8,7 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 
 const Register = () => {
+  
   const navigate = useNavigate();
 
   const validationSchema = Yup.object({
@@ -21,7 +22,7 @@ const Register = () => {
     password: Yup.string()
       .min(5, 'Password must be at least 5 characters')
       .required('Password is required')
-      .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/, 'Password must contain uppercase, lowercase, number, and symbol'),
+      .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/, 'Include atleast one  (A-Z), (a-z), (0-9), and (!@#$%^&*)'),
     profileImg: Yup.mixed()
       .nullable()
       .test(
@@ -68,12 +69,17 @@ const Register = () => {
             'Content-Type':'application/json'
           }
         });
-        toast.success(response.data.message);
 
-        if (response.data.success) {
+        toast.success(response.data.message);
+        formik.setValues({           //use resetForm()
+          name: '',
+          email: '',
+          password: '',
+          profileImg: '',
+        });
+
           navigate('/email');
-          formik.resetForm();
-        }
+
       } catch (error) {
         toast.error(error?.response?.data?.message || error.message);
       }

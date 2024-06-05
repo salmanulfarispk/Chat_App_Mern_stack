@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from "yup";
@@ -11,6 +11,13 @@ export default function Password() {
 
       const navigate=useNavigate()
       const location= useLocation()
+      // console.log(location);
+
+       useEffect(()=>{
+        if(!location?.state?.name){
+          navigate("/emailpage")
+        }
+       },[])
 
       const formik=useFormik({
         initialValues:{
@@ -27,10 +34,11 @@ export default function Password() {
             const URL = `${import.meta.env.VITE_REACT_APP_BACKEND_URL}/api/password`;
 
             try {
-              const formData= new FormData()
-               formData.append("password",values.password)
 
-               const res=await axios.post(URL,formData,{
+               const res=await axios.post(URL, {
+                password: values.password,
+                userId: location?.state?._id
+            },{
                 headers: {
                   'Content-Type':'application/json'
                 }
@@ -53,10 +61,11 @@ export default function Password() {
   return (
     <div className='mt-16 rounded-lg'>
       <div className='bg-white w-full max-w-md rounded overflow-hidden p-4 mx-auto'>
-        <div className='w-fit mx-auto mb-2'>
-          <Avatar width={70} name={"Salman Faris"} height={70}/>
+
+        <div className='w-fit mx-auto mb-2 flex justify-center items-center flex-col'>
+          <Avatar width={70} name={location?.state?.name} height={70} image={location?.state?.profileImg}/>
+          <h2 className='font-semibold text-lg mt-1'>{location?.state?.name}</h2>
         </div>
-        <h3 className='flex justify-center items-center'>Melcow Mr User!</h3>
 
         <form className='grid gap-4 mt-5'onSubmit={formik.handleSubmit} >
         <div className='flex flex-col gap-1'>

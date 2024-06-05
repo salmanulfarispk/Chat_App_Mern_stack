@@ -19,18 +19,18 @@ export default function Avatar({userId,name,image,width,height}) {
 
 
      const bgcolor=[
-        'bg-slate-400',
+        'bg-sky-600',
         'bg-teal-700',
-        'bg-red-700',
+        'bg-red-600',
         'bg-green-700',
-        'bg-yellow-700',
-        'bg-orange-700'
+        'bg-yellow-600',
+        'bg-violet-500'
      ]
 
      const randomnum= Math.floor(Math.random() * 5)   //generates a random number between 0 and max(here5)
 
   return (
-    <div className={`text-slate-300 overflow-hidden rounded-full shadow border text-3xl font-bold ${bgcolor[randomnum]}`}
+    <div className='text-slate-800 overflow-hidden rounded-full font-bold'
     style={{width: width+"px",height: height+"px"}}>
 
      {
@@ -43,8 +43,8 @@ export default function Avatar({userId,name,image,width,height}) {
           />
         ):(
             name ? (
-               <div className='overflow-hidden rounded-full flex
-               justify-center items-center' style={{width: width+"px",height: height+"px"}}>
+               <div className={`overflow-hidden rounded-full flex border text-lg 
+               justify-center items-center  ${bgcolor[randomnum]}`} style={{width: width+"px",height: height+"px"}}>
                      {avatarname}
                 </div>
             ) : (

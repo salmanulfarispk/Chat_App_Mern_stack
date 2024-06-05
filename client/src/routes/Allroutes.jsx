@@ -6,6 +6,8 @@ import EmailPage  from "../pages/EmailPage"
 import Home from "../pages/Home"
 import Message from "../components/Message"
 import Authlayout from "../layout/common"
+import ForgotPass from "../pages/ForgotPass"
+import ResetPass from "../pages/ResetPass"
 
 
 
@@ -26,6 +28,14 @@ const router= createBrowserRouter([
             {
                 path:"/passwordpage",
                 element:<Authlayout><Password/></Authlayout>
+            },
+            {
+               path:"/forgot-password",
+               element:<Authlayout><ForgotPass/></Authlayout>
+            },
+            {
+                path: "/reset-password/:token", 
+                element: <Authlayout><ResetPass/></Authlayout>
             },
             {
                 path:"",

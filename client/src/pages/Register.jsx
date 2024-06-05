@@ -78,7 +78,7 @@ const Register = () => {
           profileImg: '',
         });
 
-          navigate('/email');
+          navigate('/emailpage');
 
       } catch (error) {
         toast.error(error?.response?.data?.message || error.message);
@@ -196,7 +196,7 @@ const Register = () => {
           </button>
         </form>
 
-        <p className='my-3 text-center'>Already have an account? <Link to={"/login"} className='hover:text-primary font-semibold'>Login</Link></p>
+        <p className='my-3 text-center'>Already have an account? <Link to={"/emailpage"} className='hover:text-primary font-semibold'>Login</Link></p>
       </div>
     </div>
   );

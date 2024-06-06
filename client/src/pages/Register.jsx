@@ -70,15 +70,19 @@ const Register = () => {
           }
         });
 
-        toast.success(response.data.message);
-        formik.setValues({           //use resetForm()
-          name: '',
-          email: '',
-          password: '',
-          profileImg: '',
-        });
+         toast.success(response.data.message);
 
-          navigate('/emailpage');
+          if(response.data.success){
+            formik.setValues({           //or use resetForm()
+              name: '',
+              email: '',
+              password: '',
+              profileImg: '',
+            });
+    
+              navigate('/emailpage');
+          }
+       
 
       } catch (error) {
         toast.error(error?.response?.data?.message || error.message);

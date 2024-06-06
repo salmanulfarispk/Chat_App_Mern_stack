@@ -5,12 +5,15 @@ import * as Yup from "yup";
 import axios from "axios"
 import toast from 'react-hot-toast';
 import Avatar from '../components/Avatar';
+import { useDispatch } from 'react-redux';
+import { setToken } from '../redux/UserSlice';
 
 
 export default function Password() {
 
       const navigate=useNavigate()
       const location= useLocation()
+      const dispatch=useDispatch()
 
        useEffect(()=>{
         if(!location?.state?.name){
@@ -45,13 +48,19 @@ export default function Password() {
                 withCredentials: true
                 
                });
-
+                 
+               
+               if(res.data.success){
                toast.success(res.data.message)
-               formik.setValues({
+                dispatch(setToken(res?.data?.token))  //when i pasword succes the token is stored in token in slice means store
+                localStorage.setItem("token",res?.data?.token)
+                formik.setValues({
                 password:""
-               })
+               });
 
                navigate("/")
+               }
+               
               
             } catch (error) {
               toast.error(error?.response?.data?.message || error.message)

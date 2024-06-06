@@ -32,16 +32,19 @@ export default function EmailPage() {
               'Content-Type':'application/json'
             }
           });
-
-          toast.success(response.data.message);
-          formik.setValues({
-            email:""
-          });
-
-          navigate("/passwordpage",{
-            state: response?.data?.data
-          })
           
+          toast.success(response.data.message);
+           
+          if(response.data.success){
+            formik.setValues({
+              email:""
+            });
+  
+            navigate("/passwordpage",{
+              state: response?.data?.data
+            })
+          }
+         
         } catch (error) {
           toast.error(error?.response?.data?.message || error.message);
         }

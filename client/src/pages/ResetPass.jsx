@@ -30,9 +30,12 @@ function ResetPass() {
         const response = await axios.post(URL, { token: params.token, password: values.password }, {
           headers: { 'Content-Type': 'application/json' }
         });
-
-        toast.success(response.data.message);
-        navigate('/emailpage');
+        
+         if(response.data.success){
+          toast.success(response.data.message);
+          navigate('/emailpage');
+         }
+       
       } catch (error) {
         toast.error(error?.response?.data?.message || error.message);
       }

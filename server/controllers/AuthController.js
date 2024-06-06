@@ -35,6 +35,7 @@ module.exports={
 
       return res.status(201).json({
         message: "User created successfully",
+        success:true,
         data: newUser,
         error: false
 
@@ -111,7 +112,7 @@ verifypassword:async(req,res)=>{
             secure: true,
         }
 
-        return res.cookie("token",token,CookieOption).status(200).json({
+        return res.cookie("token",token,CookieOption).status(200).json({  //token  stores in cokkie
             message:"Login succesfull",
             token: token,
             success: true

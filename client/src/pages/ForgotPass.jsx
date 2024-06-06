@@ -29,13 +29,16 @@ export default function ForgotPass() {
             'Content-Type':'application/json'
           }
          });
+           
+         toast.success(response.data.message)
 
-            toast.success(response.data.message)
+           if(response.data.success){
             formik.setValues({
               email:""
             });
               navigate('/emailpage')
-            
+           }
+             
 
       } catch (error) {
         toast.error(error?.response?.data?.message || error.message);

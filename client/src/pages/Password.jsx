@@ -11,7 +11,6 @@ export default function Password() {
 
       const navigate=useNavigate()
       const location= useLocation()
-      // console.log(location);
 
        useEffect(()=>{
         if(!location?.state?.name){
@@ -41,7 +40,10 @@ export default function Password() {
             },{
                 headers: {
                   'Content-Type':'application/json'
-                }
+                },
+
+                withCredentials: true
+                
                });
 
                toast.success(res.data.message)

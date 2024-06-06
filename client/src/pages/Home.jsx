@@ -6,7 +6,7 @@ export default function Home() {
     <div>
          home
       <section>
-        <Outlet/>
+      <Outlet/>  
       </section>
     </div>
   )

@@ -19,12 +19,12 @@ export default function Avatar({userId,name,image,width,height}) {
 
 
      const bgcolor=[
-        'bg-sky-600',
-        'bg-teal-700',
-        'bg-red-600',
-        'bg-green-700',
-        'bg-yellow-600',
-        'bg-violet-500'
+        'bg-sky-200',
+        'bg-teal-200',
+        'bg-red-200',
+        'bg-green-200',
+        'bg-violet-200',
+        'bg-slate-200'
      ]
 
      const randomnum= Math.floor(Math.random() * 5)   //generates a random number between 0 and max(here5)

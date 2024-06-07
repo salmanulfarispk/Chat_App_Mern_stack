@@ -4,6 +4,7 @@ import { Outlet, useNavigate } from 'react-router-dom'
 import axios from "axios"
 import { useDispatch, useSelector } from 'react-redux';
 import { logout, setUser } from '../redux/UserSlice';
+import Sidebar from '../components/Sidebar';
 
 export default function Home() {
 
@@ -37,11 +38,15 @@ export default function Home() {
       fetchUserDetails()
    },[])
   return (
-    <div>
-         home
+    <div className='grid lg:grid-cols-[300px,1fr] h-screen max-h-screen'>
+         <section className='bg-white'>
+           <Sidebar/>
+         </section>
+         
       <section>
       <Outlet/>  
       </section>
+
     </div>
   )
 }

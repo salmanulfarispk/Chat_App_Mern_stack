@@ -28,7 +28,7 @@ const Register = () => {
       .test(
         'fileSize',
         'File too large',
-        value => !value || (value && value.size <= 2 * 1024 * 1024)    //value is inputed data in inputfield
+        value => !value || (value && value.size <= 3 * 1024 * 1024)    //value is inputed data in inputfield
       )
       .test(
         'fileType',

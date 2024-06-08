@@ -1,16 +1,17 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { IoChatbubbleEllipses } from "react-icons/io5";
 import { FaUserPlus } from "react-icons/fa";
 import { NavLink } from 'react-router-dom';
 import { BiLogOut } from "react-icons/bi";
 import Avatar from "./Avatar"
 import { useSelector } from 'react-redux';
+import EditUserDetails from './EditUserDetails';
 
 
 export default function Sidebar() {
    
     const userDetails= useSelector(state=> state?.user)
-    console.log(userDetails);
+     const [editOpenUSer,setEditUserOpen]=useState(false)
 
   return (
     <div className='w-full h-full'>
@@ -28,12 +29,9 @@ export default function Sidebar() {
                </div>
                    
                    <div className='flex flex-col items-center'>
-                        <button className='mx-auto' title={userDetails?.name}>
+                        <button className='mx-auto' title={userDetails?.name} onClick={()=> setEditUserOpen(true)}>
                             <Avatar width={38} height={38}
-                             name={userDetails?.name}/>
-                            <div>
-
-                            </div>
+                             name={userDetails?.name}/> 
                         </button>
 
                         <button title='logout' className='w-12 h-12 cursor-pointer flex justify-center items-center
@@ -43,6 +41,10 @@ export default function Sidebar() {
                    </div>
          </div>
 
+           {/**edit userdetail modal */}
+          {editOpenUSer && (
+            <EditUserDetails onClose={()=> setEditUserOpen(false)} user={userDetails}/>
+          )}
     </div>
   )
 }

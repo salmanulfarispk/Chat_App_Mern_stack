@@ -30,8 +30,8 @@ export default function Avatar({userId,name,image,width,height}) {
      const randomnum= Math.floor(Math.random() * 5)   //generates a random number between 0 and max(here5)
 
   return (
-    <div className='text-slate-800 overflow-hidden rounded-full font-bold'
-    style={{width: width+"px",height: height+"px"}}>
+    <div className={`text-slate-800  rounded-full font-bold relative`} style={{width : width+"px", height : height+"px" }}
+    >
 
      {
         image ? (
@@ -39,12 +39,12 @@ export default function Avatar({userId,name,image,width,height}) {
           alt={name}
           height={height}
           width={width}
-          className='overflow-hidden rounded-full' 
+          className='overflow-hidden rounded-full w-full h-full' 
           />
         ):(
             name ? (
                <div className={`overflow-hidden rounded-full flex border text-lg 
-               justify-center items-center  ${bgcolor[randomnum]}`} style={{width: width+"px",height: height+"px"}}>
+               justify-center items-center  ${bgcolor[randomnum]}`} style={{width : width+"px", height : height+"px" }}>
                      {avatarname}
                 </div>
             ) : (

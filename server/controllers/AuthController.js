@@ -139,7 +139,7 @@ verifypassword:async(req,res)=>{
         })
       }
 
-      const token= jwt.sign({email},process.env.FORGOT_PASS,{ expiresIn: '15m' })
+      const token= jwt.sign({email},process.env.FORGOT_PASS,{ expiresIn: '10m' })
       const data={
         email,
         token

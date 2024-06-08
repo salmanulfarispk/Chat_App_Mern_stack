@@ -33,7 +33,13 @@ export default function EmailPage() {
             }
           });
           
-          toast.success(response.data.message);
+          toast.success(response.data.message,{
+            position: 'top-right',
+             style: {
+                    background: '#219C90',
+                    color: 'white',
+                  },
+          });
            
           if(response.data.success){
             formik.setValues({
@@ -46,7 +52,13 @@ export default function EmailPage() {
           }
          
         } catch (error) {
-          toast.error(error?.response?.data?.message || error.message);
+          toast.error(error?.response?.data?.message || error.message,{
+            position: 'top-right',
+             style: {
+                    background: 'red',
+                    color: 'white',
+                  },
+          });
         }
       }
      })

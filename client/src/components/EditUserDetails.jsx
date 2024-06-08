@@ -11,9 +11,11 @@ import { RiImageAddLine } from "react-icons/ri";
 import Divider from "./Divider"
 
 
+
 export default function EditUserDetails({onClose,user}) {
 
      const dispatch=useDispatch()
+     
 
    const validationSchema= Yup.object({
     name: Yup.string()
@@ -68,8 +70,15 @@ export default function EditUserDetails({onClose,user}) {
                     toast.success("user profile updated!")
                     onClose()
                   }
+                   
             } catch (error) {
-              toast.error(error?.response?.data?.message || error.message);
+              toast.error(error?.response?.data?.message || error.message, {
+                position: 'top-right',
+                style: {
+                    background: 'red',
+                    color: 'white',
+                  },
+              });
             }
         }
     })

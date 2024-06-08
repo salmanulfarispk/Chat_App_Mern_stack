@@ -17,7 +17,7 @@ export default function Password() {
 
        useEffect(()=>{
         if(!location?.state?.name){
-          navigate("/emailpage")
+          navigate("/emailpage")        //even if we dont login and try to naviagte to password page ,it directly goes to email page
         }
        },[])
 
@@ -51,7 +51,13 @@ export default function Password() {
                  
                
                if(res.data.success){
-               toast.success(res.data.message)
+               toast.success(res.data.message,{
+                position: 'top-right',
+                style: {
+                    background: '#219C90',
+                    color: 'white',
+                  },
+               })
                 dispatch(setToken(res?.data?.token))  //when i pasword succes the token is stored in token in slice means store
                 localStorage.setItem("token",res?.data?.token)
                 formik.setValues({
@@ -63,7 +69,13 @@ export default function Password() {
                
               
             } catch (error) {
-              toast.error(error?.response?.data?.message || error.message)
+              toast.error(error?.response?.data?.message || error.message,{
+                position: 'top-right',
+                style: {
+                    background: 'red',
+                    color: 'white',
+                  },
+              })
             }
         }
       })

@@ -70,7 +70,13 @@ const Register = () => {
           }
         });
 
-         toast.success(response.data.message);
+         toast.success(response.data.message,{
+          position: 'top-right',
+             style: {
+                    background: '#219C90',
+                    color: 'white',
+                  },
+         });
 
           if(response.data.success){
             formik.setValues({           //or use resetForm()

@@ -14,7 +14,7 @@ export default function Sidebar() {
      const [editOpenUSer,setEditUserOpen]=useState(false)
 
   return (
-    <div className='w-full h-full'>
+    <div className='w-full h-full grid grid-cols-[48px,1fr]'>
          <div className='bg-slate-100 w-12 h-full rounded-tr-lg rounded-br-lg py-5 text-slate-600 flex flex-col justify-between'>
 
                <div>
@@ -28,10 +28,12 @@ export default function Sidebar() {
                </div>   
                </div>
                    
-                   <div className='flex flex-col items-center'>
+                   <div className='flex flex-col items-center gap-2'>
                         <button className='mx-auto' title={userDetails?.name} onClick={()=> setEditUserOpen(true)}>
                             <Avatar width={38} height={38}
-                             name={userDetails?.name}/> 
+                             name={userDetails?.name}
+                            image={userDetails?.profileImg}
+                             /> 
                         </button>
 
                         <button title='logout' className='w-12 h-12 cursor-pointer flex justify-center items-center
@@ -40,6 +42,10 @@ export default function Sidebar() {
                        </button>
                    </div>
          </div>
+
+           <div className='w-full'>
+                 message
+           </div>
 
            {/**edit userdetail modal */}
           {editOpenUSer && (

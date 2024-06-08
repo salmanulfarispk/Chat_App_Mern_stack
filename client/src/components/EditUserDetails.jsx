@@ -85,7 +85,7 @@ export default function EditUserDetails({onClose,user}) {
 
 
     const handlePhotoChange = (event) => {
-        formik.setFieldValue('profileImg', event.target.files[0]);
+        formik.setFieldValue('profileImg', event.target.files[0]); 
       };
     
   return (
@@ -103,7 +103,7 @@ export default function EditUserDetails({onClose,user}) {
                  placeholder='change name'
                  value={formik.values.name}
                  onChange={formik.handleChange}
-                 className='w-full py-1 px-2 focus:outline-primary border-spacing-0.5'
+                 className='w-full py-2 px-2 focus:outline-primary font-medium text-slate-600 border-spacing-0.5 bg-gray-100 rounded-md'
                  />
                  {formik.errors.name && formik.touched.name ? (
                   <div className='text-red-500 text-sm'>{formik.errors.name}</div>

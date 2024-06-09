@@ -1,6 +1,6 @@
 const express=require("express")
 const { registerUser, checksEmail, verifypassword, ForgotPassword, resetPass } = require("../controllers/AuthController")
-const { userDetails, Logout, updateUserDetails } = require("../controllers/userController")
+const { userDetails, Logout, updateUserDetails, SearchUser } = require("../controllers/userController")
 const router=express.Router()
 
 
@@ -17,6 +17,7 @@ router
 .get("/user-details",userDetails)
 .get("/logout",Logout)
 .patch("/update-user",updateUserDetails)
+.post("/search-user", SearchUser)
 
 
 

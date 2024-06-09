@@ -4,8 +4,11 @@ import LoadingSpinner from './LoadingSpinner';
 import UserCard from './UserCard';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import { IoClose } from "react-icons/io5";
 
-export default function SearchUser() {
+
+
+export default function SearchUser({onClose}) {
   
     const [searchuser,setSearchUser]=useState([])  
     const [loading,setLoading]=useState(false)
@@ -19,10 +22,8 @@ export default function SearchUser() {
             setLoading(true)
             const response=await axios.post(URL,{
                 search: searchTerm
-            },{
-                withCredentials: true
-            }
-        )
+            })
+        
           
            setLoading(false)
            setSearchUser(response.data.data)
@@ -46,7 +47,7 @@ export default function SearchUser() {
        },[searchTerm])
 
 
-       console.log("searchuser",searchuser);
+    //    console.log("searchuser",searchuser);
       
   return (
     <div className='fixed inset-0 bg-slate-700 bg-opacity-40 p-2'>
@@ -74,7 +75,7 @@ export default function SearchUser() {
 
                      {
                          loading && (
-                          <p><LoadingSpinner/></p>
+                          <div><LoadingSpinner/></div>
                         )
                      }    
 
@@ -85,7 +86,7 @@ export default function SearchUser() {
 
                             searchuser.map((user,index)=>{
                                 return (
-                                    <UserCard key={user._id} user={user}/>
+                                    <UserCard key={user._id} user={user} onClose={onClose}/>
                                 )
 
                             })
@@ -94,7 +95,12 @@ export default function SearchUser() {
                      }
                         
                  </div>
+           </div>
 
+           <div className='absolute top-0 right-0 text-2xl p-2  lg:text-4xl hover:text-white'>
+            <button>
+           <IoClose onClick={onClose}/> 
+            </button>
            </div>
     </div>
   )

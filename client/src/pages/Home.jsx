@@ -58,14 +58,14 @@ export default function Home() {
       <Outlet/>  
       </section>
 
-      {basePath && (
-        <div className='lg:flex justify-center items-center flex-col gap-2 hidden'>
+      
+        <div className={`justify-center items-center flex-col gap-2 hidden ${!basePath ? "hidden" : "lg:flex" }`}>
           <div>
-            <img src={logo} alt='logo' width={200} height={200} />
+            <img src={logo} alt='logo' width={250} />
           </div>
           <p className='text-lg mt-2 text-slate-500 ms-5'>select user to send message!</p>
         </div>
-      )}
+    
 
     </div>
   )

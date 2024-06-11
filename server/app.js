@@ -1,11 +1,13 @@
 const express=require("express")
 const cors=require("cors")
-const app=express()
 require('dotenv').config()
 const connectDB=require("./config/DBconnect")
 const PORT=process.env.PORT || 8080
 const Routes=require("./routes/AllRoutes")
 const cookieParser=require("cookie-parser")
+const {app,server}=require("./socket/index")
+
+
 
 app.use(cors({
     origin: process.env.FRONTEND_URL,
@@ -18,7 +20,7 @@ app.use("/api/",Routes)
 
 
 connectDB().then(()=>{
-    app.listen(PORT,()=>{
+       server.listen(PORT,()=>{
         console.log("server running on",PORT);
     })
 })

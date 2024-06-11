@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux';
 import { logout, setUser } from '../redux/UserSlice';
 import Sidebar from '../components/Sidebar';
 import logo from "../assets/logo.png"
-
+import io from "socket.io-client"
 
 export default function Home() {
 
@@ -45,6 +45,21 @@ export default function Home() {
    useEffect(()=>{
       fetchUserDetails()
    },[])
+
+
+     //socket connection
+     useEffect(()=>{
+        const socketconnection= io(import.meta.env.VITE_REACT_APP_BACKEND_URL,{
+          auth:{
+            token:localStorage.getItem("token")
+          }
+        })
+
+        return ()=>{
+          socketconnection.disconnect()
+        }
+     },[])
+
 
    const basePath= location.pathname === '/'
 

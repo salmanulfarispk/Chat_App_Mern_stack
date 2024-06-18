@@ -2,8 +2,8 @@ import React, { useEffect } from 'react'
 import toast from 'react-hot-toast';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import axios from "axios"
-import { useDispatch } from 'react-redux';
-import { logout, setUser } from '../redux/UserSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout, setOnlineUser, setUser, setsocketConnection } from '../redux/UserSlice';
 import Sidebar from '../components/Sidebar';
 import logo from "../assets/logo.png"
 import io from "socket.io-client"
@@ -13,7 +13,8 @@ export default function Home() {
    const navigate=useNavigate()
    const dispatch=useDispatch()
    const location=useLocation()
-
+   const user=useSelector(state=> state.user)
+  //  console.log("userdetails",user);
 
    const fetchUserDetails= async()=>{
       const URL=`${import.meta.env.VITE_REACT_APP_BACKEND_URL}/api/user-details`
@@ -54,6 +55,13 @@ export default function Home() {
             token:localStorage.getItem("token")
           }
         })
+             
+        socketconnection.on("onlineUser",(data)=>{
+          console.log("data",data);
+          dispatch(setOnlineUser(data))
+        })
+        
+        dispatch(setsocketConnection(socketconnection))
 
         return ()=>{
           socketconnection.disconnect()

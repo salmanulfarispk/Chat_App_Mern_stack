@@ -9,7 +9,7 @@ const getUserFromUserDetail= async(token)=>{
         }
      }
    
-
+     try{
      const decode= await jwt.verify(token,process.env.JWT_SECRET_KEY)
      if (!decode) {
         return res.status(401).json({ error: "Unauthorized: Invalid Token" });
@@ -18,8 +18,15 @@ const getUserFromUserDetail= async(token)=>{
     const user= await UserModel.findById(decode.id).select("-password")
     
     return user;
-
-
+}catch(err){
+    if (err.name === 'TokenExpiredError') {
+        return { error: 'TokenExpiredError' };
+    }
+    return {
+        message: "Unauthorized: Invalid Token",
+        logout: true,
+    };
+}
 } 
 
 

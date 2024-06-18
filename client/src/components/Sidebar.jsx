@@ -39,6 +39,7 @@ export default function Sidebar() {
                             <Avatar width={38} height={38}
                              name={userDetails?.name}
                             image={userDetails?.profileImg}
+                            userId={userDetails?._id}
                              /> 
                         </button>
 

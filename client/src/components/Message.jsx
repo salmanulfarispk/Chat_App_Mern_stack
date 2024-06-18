@@ -1,12 +1,18 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useParams } from "react-router-dom"
-
+import Avatar from "./Avatar"
 
 function Message() {
    
   const params=useParams()
   // console.log(params.userId);
+  const [datauser,setDataUser]=useState({
+    name:"",
+    email:"",
+    profileImg:"",
+    online: false
+  })
   const socketconnection= useSelector(state=> state?.user?.socketConnection)
 
 
@@ -16,13 +22,25 @@ function Message() {
     }
 
      socketconnection.on("message-user",(data)=>{
-         console.log("data",data);
+         setDataUser(data)
      })
 
-  },[socketconnection,params])
+  },[socketconnection,params?.userId])
 
   return (
-    <div>Message apge</div>
+    <div>
+      <header className='sticky top-0 h-16 bg-white'>
+          <div>
+            <div>
+              <Avatar height={40} width={40} 
+              userId={datauser?._id} 
+              name={datauser?.name} 
+              image={datauser?.profileImg}
+              />
+            </div>
+          </div>
+      </header>
+    </div>
   )
 }
 

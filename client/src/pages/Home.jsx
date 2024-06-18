@@ -57,7 +57,7 @@ export default function Home() {
         })
              
         socketconnection.on("onlineUser",(data)=>{
-          console.log("data",data);
+          // console.log("data",data);
           dispatch(setOnlineUser(data))
         })
         

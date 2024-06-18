@@ -33,7 +33,7 @@ io.on("connection",async(socket)=>{
     //create a room 
   
     socket.join(user?._id)
-    onlineUser.add(user?._id)
+    onlineUser.add(user?._id?.toString())
    
     io.emit("onlineUser",Array.from(onlineUser))  //By using Array.from, the Set onlineUser is converted into an Array.
 
@@ -45,6 +45,7 @@ io.on("connection",async(socket)=>{
             _id: userDetails?._id,
             name: userDetails?.name,
             email: userDetails?.email,
+            profileImg: userDetails?.profileImg,
             online: onlineUser.has(userId)
 
         }

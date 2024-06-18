@@ -12,7 +12,7 @@ export default function UserCard({user,onClose}) {
                 height={50}
                 name={user?.name}
                 userId={user?._id}  
-                imageUrl={user?.profile_pic}
+                image={user?.profileImg}
             />
         </div>
         <div>

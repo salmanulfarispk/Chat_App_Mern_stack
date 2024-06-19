@@ -5,6 +5,8 @@ import Avatar from "./Avatar"
 import { HiDotsVertical } from "react-icons/hi";
 import { FaAngleLeft } from "react-icons/fa6";
 import { FaPlus } from "react-icons/fa6";
+import { FaImage } from "react-icons/fa6";
+import { MdVideoCameraBack } from "react-icons/md";
 
 function Message() {
    
@@ -18,6 +20,7 @@ function Message() {
     profileImg:"",
     online: false
   })
+  const [openImgVid,setOpenImgVid]=useState(false)
   const socketconnection= useSelector(state=> state?.user?.socketConnection)
 
 
@@ -78,17 +81,36 @@ function Message() {
       {/** send message  */}
 
        <section className='h-16 bg-white flex items-center px-3'>
-          <div className='relative flex justify-center items-center w-11 h-11 rounded-full hover:bg-primary hover:text-white'>
-            <button>
+       <div className='relative'>
+            <button className='flex justify-center items-center w-11 h-11 
+            rounded-full hover:bg-primary hover:text-white' onClick={()=> setOpenImgVid(prev=> !prev)}>
             <FaPlus size={20}/>
             </button>
 
         {/** video and image  */}
+            {
+              openImgVid && (
+                <div className='bg-white shadow rounded absolute bottom-14 w-36 p-2'>
+                <form>
+                  <label htmlFor='uploadimage' className='flex items-center p-2 px-3 gap-3 hover:bg-slate-200 rounded-sm cursor-pointer'>
+                   <div className='text-primary'>
+                      <FaImage size={18}/>
+                   </div>
+                   <p>Photo</p>
+                  </label>
+ 
+                  <label htmlFor='uploadvideo' className='flex items-center p-2 px-3 gap-3 hover:bg-slate-200 rounded-sm cursor-pointer'>
+                   <div className='text-purple-600'>
+                      <MdVideoCameraBack size={22}/>
+                   </div>
+                   <p>video</p>
+                  </label>
+                </form>
+             </div>
+              )
+            }
         
-            <div className=''>
-              
-
-            </div>
+            
           </div>
        </section>
         

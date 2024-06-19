@@ -89,7 +89,7 @@ export default function EditUserDetails({onClose,user}) {
       };
     
   return (
-    <div className='fixed inset-0 bg-gray-700 bg-opacity-40 flex justify-center items-center'>
+    <div className='fixed inset-0 bg-gray-700 bg-opacity-40 flex justify-center items-center z-10'>
         <div className='bg-white p-4 py-6 m-1 rounded-md w-full max-w-sm'>
             <h2 className='font-semibold'>Profile Details</h2>
             <p className='text-sm'>Edit user details</p>

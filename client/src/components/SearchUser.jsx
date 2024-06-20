@@ -97,7 +97,7 @@ export default function SearchUser({onClose}) {
                  </div>
            </div>
 
-           <div className='absolute top-0 right-0 text-2xl p-2  lg:text-4xl hover:text-white'>
+           <div className='absolute top-0 right-5 text-2xl p-2  lg:text-4xl hover:text-white'>
             <button>
            <IoClose onClick={onClose}/> 
             </button>

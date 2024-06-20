@@ -7,6 +7,10 @@ import { FaAngleLeft } from "react-icons/fa6";
 import { FaPlus } from "react-icons/fa6";
 import { FaImage } from "react-icons/fa6";
 import { MdVideoCameraBack } from "react-icons/md";
+import uploadFile  from "../helpers/uploadFile"
+import { IoClose } from "react-icons/io5";
+import LoadingSpinner from "./LoadingSpinner"
+
 
 function Message() {
    
@@ -21,7 +25,60 @@ function Message() {
     online: false
   })
   const [openImgVid,setOpenImgVid]=useState(false)
+  const [message,setMessage]=useState({
+     text:"",
+     imageUrl:"",
+     videoUrl:""
+  })
+  const[loading,setLoading]=useState(false) 
+
+  
   const socketconnection= useSelector(state=> state?.user?.socketConnection)
+
+  const handleUploadImage=async (e)=>{
+      const file= e.target.files[0]
+      setLoading(true)
+      const uploadimageUrl= await uploadFile(file)
+      setLoading(false)
+      setOpenImgVid(false)
+      if (uploadimageUrl) {
+        setMessage((prev) => ({
+          ...prev,
+          imageUrl: uploadimageUrl
+        }));
+      } else {
+        console.error('Failed to upload image');
+      }
+  }
+ 
+  const handleClearuploadImg=()=>{
+    setMessage((prev) => ({
+      ...prev,
+      imageUrl: ""
+    }));
+  }
+  
+
+  const handleUploadVideo=async(e)=>{
+    const file= e.target.files[0]
+     setLoading(true)
+      const uploadVideo= await uploadFile(file)
+      setLoading(false) 
+      setOpenImgVid(false)
+      setMessage((prev)=>{
+        return {
+          ...prev,
+          videoUrl : uploadVideo
+        }
+      })
+  }
+
+  const handleClearuploadVideo=()=>{
+    setMessage((prev) => ({
+      ...prev,
+      videoUrl: ""
+    }));
+  }
 
 
   useEffect(()=>{
@@ -40,6 +97,9 @@ function Message() {
     };
 
   },[socketconnection,params?.userId,user])
+
+
+
 
   return (
     <div>
@@ -69,12 +129,60 @@ function Message() {
             <HiDotsVertical size={23}/>
             </button>
           </div>
-      </header>
+      </header>   
 
 
       {/**show all message  */}
 
-      <section className='h-[calc(100vh-128px)] overflow-x-hidden overflow-y-scroll scrollbar'>
+      <section className='h-[calc(100vh-128px)] overflow-x-hidden overflow-y-scroll scrollbar relative'>
+           
+            {/**display image message */}
+        {
+          message.imageUrl && (
+            <div className='w-full h-full bg-slate-700 bg-opacity-30 flex justify-center items-center rounded overflow-hidden'>
+            <div className='w-fit p-2 absolute top-0 right-0 cursor-pointer hover:text-gray-100'
+            onClick={handleClearuploadImg}>
+              <IoClose size={30} className='hover:scale-125'/>
+              </div>
+            <div className='bg-white p-3'>
+              <img src={message.imageUrl} alt='upload-image'
+              className='aspect-square w-full h-full max-w-sm m-2 object-scale-down'
+              />
+            </div>
+         </div>
+          ) 
+        }
+
+
+        {/**display video message */}
+        {
+          message.videoUrl && (
+            <div className='w-full h-full bg-slate-700 bg-opacity-30 flex justify-center items-center rounded overflow-hidden'>
+            <div className='w-fit p-2 absolute top-0 right-0 cursor-pointer hover:text-gray-100'
+            onClick={handleClearuploadVideo}>
+              <IoClose size={30} className='hover:scale-125'/>
+              </div>
+            <div className='bg-white p-3'>
+              <video src={message.videoUrl}
+              controls
+              muted
+              autoPlay
+              className='aspect-video w-full h-full max-w-sm m-2'
+              />
+            </div>
+         </div>
+          ) 
+        }
+
+        {
+          loading && (
+            <div className='w-full h-full flex justify-center items-center '>
+              <LoadingSpinner/>
+            </div>
+          )
+        }
+
+
         Show all messages 
       </section>
        
@@ -105,6 +213,18 @@ function Message() {
                    </div>
                    <p>video</p>
                   </label>
+
+                  <input type='file'
+                  id='uploadimage'
+                  onChange={handleUploadImage}
+                  className='hidden'
+                  />
+                   <input type='file'
+                  id='uploadvideo'
+                  onChange={handleUploadVideo}
+                  className='hidden'
+                  />
+
                 </form>
              </div>
               )
@@ -113,7 +233,7 @@ function Message() {
             
           </div>
        </section>
-        
+  
     </div>
   )
 }

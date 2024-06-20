@@ -1,5 +1,5 @@
 
-const url = `https://api.cloudinary.com/v1_1/${import.meta.env.VITE_REACT_APP_CLOUDINARY_CLOUD_NAME}/auto/upload` //here i use auto cause of i upload both video and image
+const url = `https://api.cloudinary.com/v1_1/${import.meta.env.VITE_REACT_APP_CLOUDINARY_CLOUD_NAME}/auto/upload` //here i use auto, we can upload both video and image
 
 const uploadFile = async(file) => {
     const formData = new FormData();

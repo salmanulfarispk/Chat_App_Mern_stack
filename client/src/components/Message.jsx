@@ -10,7 +10,7 @@ import { MdVideoCameraBack } from "react-icons/md";
 import uploadFile  from "../helpers/uploadFile"
 import { IoClose } from "react-icons/io5";
 import LoadingSpinner from "./LoadingSpinner"
-
+import backgroundImage from "../assets/AA.jpg"
 
 function Message() {
    
@@ -102,7 +102,7 @@ function Message() {
 
 
   return (
-    <div>
+    <div style={{backgroundImage : `url(${backgroundImage})`}} className='bg-no-repeat bg-cover'>
       <header className='sticky top-0 h-16 bg-white flex justify-between items-center'>
           <div className='flex items-center gap-4'>
             <Link to={"/"} className='lg:hidden text-slate-500'><FaAngleLeft  size={25}/></Link>
@@ -134,7 +134,8 @@ function Message() {
 
       {/**show all message  */}
 
-      <section className='h-[calc(100vh-128px)] overflow-x-hidden overflow-y-scroll scrollbar relative'>
+      <section className='h-[calc(100vh-128px)] overflow-x-hidden overflow-y-scroll 
+      scrollbar relative bg-slate-200 bg-opacity-15'>
            
             {/**display image message */}
         {
@@ -187,7 +188,6 @@ function Message() {
       </section>
        
       {/** send message  */}
-
        <section className='h-16 bg-white flex items-center px-3'>
        <div className='relative'>
             <button className='flex justify-center items-center w-11 h-11 
@@ -232,8 +232,17 @@ function Message() {
         
             
           </div>
+
+      {/** input/send messages   */}
+
+        <div>
+          <input type='text'
+            placeholder='Enter your message'
+          />
+        </div>
+
        </section>
-  
+          
     </div>
   )
 }

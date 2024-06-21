@@ -33,7 +33,7 @@ io.on("connection",async(socket)=>{
 
     //create a room 
   
-    socket.join(user?._id)
+    socket.join(user?._id?.toString())
     onlineUser.add(user?._id?.toString())
    
     io.emit("onlineUser",Array.from(onlineUser))  //By using Array.from, the Set onlineUser is converted into an Array.
@@ -79,7 +79,8 @@ io.on("connection",async(socket)=>{
         const message= new MessageModel({
             text: data.text,
             imageUrl: data.imageUrl,
-            videoUrl: data.videoUrl
+            videoUrl: data.videoUrl,
+            msgByUserId :  data?.msgByUserId,
         })
 
         const saveMessage=await message.save()
@@ -88,15 +89,17 @@ io.on("connection",async(socket)=>{
             "$push": {message : saveMessage._id}
         })
 
-        const getConversation=await ConversationModel.findOne({
+        const getConversationMessage=await ConversationModel.findOne({
             "$or":[
                 {sender : data?.sender, receiver: data?.receiver},
                 {sender : data?.receiver, receiver: data?.sender},
 
             ]
-        })
+        }).populate("message").sort({updatedAt : -1}) 
+           
         
-
+        io.to(data?.sender).emit("message",getConversationMessage.message)
+        io.to(data?.receiver).emit("message",getConversationMessage.message)
 
      });
 

@@ -33,7 +33,7 @@ function Message() {
      videoUrl:""
   })
   const[loading,setLoading]=useState(false) 
-
+  const[allMessage,setAllMessage]=useState([])
   
   const socketconnection= useSelector(state=> state?.user?.socketConnection)
 
@@ -91,6 +91,10 @@ function Message() {
      socketconnection.on("message-user",(data)=>{
          setDataUser(data)
      })
+  
+     socketconnection.on("message",(data)=>{
+        setAllMessage(data)
+     })
 
      return () => {
       socketconnection.off('message-user', (data)=>{
@@ -119,16 +123,18 @@ function Message() {
              receiver: params.userId,
              text: message.text,
              imageUrl: message.imageUrl,
-             videoUrl: message.videoUrl
+             videoUrl: message.videoUrl,
+             msgByUserId: user?._id
+           });
+
+           setMessage({
+            text:"",
+            imageUrl:"",
+            videoUrl:""
            })
+
         }
        }
-
-       setMessage({
-        text:"",
-        imageUrl:"",
-        videoUrl:""
-       })
   }
 
   return (
@@ -214,7 +220,16 @@ function Message() {
         }
 
 
-        Show all messages 
+        {/** all message shows here */}
+          
+           <div>
+            {
+              allMessage && (
+                
+              )
+            }
+           </div>
+
       </section>
        
       {/** send message  */}

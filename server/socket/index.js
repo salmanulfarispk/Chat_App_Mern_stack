@@ -4,7 +4,8 @@ const  http =require("http")
 const app=express()
 const  getUserFromUserDetails=require("../helpers/getUserDetailsFromToken")
 const UserModel = require("../models/UserModels")
-
+const ConversationModel= require("../models/ConversationModel")
+const MessageModel=require("../models/MessageModel")
 
 //socket connection
 
@@ -51,7 +52,53 @@ io.on("connection",async(socket)=>{
         }
 
         socket.emit('message-user',payload)
-     })
+     });
+
+     //new messages
+
+     socket.on("new-message",async(data)=>{
+
+        //check conversation is  available both user
+        let conversation= await ConversationModel.findOne({
+            "$or":[
+                {sender : data?.sender, receiver: data?.receiver},
+                {sender : data?.receiver, receiver: data?.sender},
+
+            ]
+        })
+
+        if(!conversation){
+            const createConversation=await ConversationModel({
+                sender : data?.sender,
+                receiver: data?.receiver
+            })
+
+            conversation=await createConversation.save()
+        }
+
+        const message= new MessageModel({
+            text: data.text,
+            imageUrl: data.imageUrl,
+            videoUrl: data.videoUrl
+        })
+
+        const saveMessage=await message.save()
+      
+        const updateConversation=await ConversationModel.updateOne({_id: conversation._id},{
+            "$push": {message : saveMessage._id}
+        })
+
+        const getConversation=await ConversationModel.findOne({
+            "$or":[
+                {sender : data?.sender, receiver: data?.receiver},
+                {sender : data?.receiver, receiver: data?.sender},
+
+            ]
+        })
+        
+
+
+     });
 
 
     //disconnect

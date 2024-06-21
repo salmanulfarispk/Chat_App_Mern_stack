@@ -10,7 +10,9 @@ import { MdVideoCameraBack } from "react-icons/md";
 import uploadFile  from "../helpers/uploadFile"
 import { IoClose } from "react-icons/io5";
 import LoadingSpinner from "./LoadingSpinner"
-import backgroundImage from "../assets/AA.jpg"
+import backgroundImage from "../assets/bb.jpeg"
+import { IoMdSend } from "react-icons/io";
+
 
 function Message() {
    
@@ -99,7 +101,35 @@ function Message() {
   },[socketconnection,params?.userId,user])
 
 
+  const handleOnchange = (e) => {
+    const { name, value } = e.target;
+    setMessage((prev) => ({
+      ...prev,
+      text: value,
+    }));
+  };
 
+
+  const handleSendMessage=(e)=>{
+       e.preventDefault();
+       if(message.text || message.imageUrl || message.videoUrl){
+        if(socketconnection){
+           socketconnection.emit("new-message",{
+             sender: user?._id,
+             receiver: params.userId,
+             text: message.text,
+             imageUrl: message.imageUrl,
+             videoUrl: message.videoUrl
+           })
+        }
+       }
+
+       setMessage({
+        text:"",
+        imageUrl:"",
+        videoUrl:""
+       })
+  }
 
   return (
     <div style={{backgroundImage : `url(${backgroundImage})`}} className='bg-no-repeat bg-cover'>
@@ -135,7 +165,7 @@ function Message() {
       {/**show all message  */}
 
       <section className='h-[calc(100vh-128px)] overflow-x-hidden overflow-y-scroll 
-      scrollbar relative bg-slate-200 bg-opacity-15'>
+      scrollbar relative bg-slate-200 bg-opacity-70'>
            
             {/**display image message */}
         {
@@ -191,7 +221,8 @@ function Message() {
        <section className='h-16 bg-white flex items-center px-3'>
        <div className='relative'>
             <button className='flex justify-center items-center w-11 h-11 
-            rounded-full hover:bg-primary hover:text-white' onClick={()=> setOpenImgVid(prev=> !prev)}>
+            rounded-full hover:bg-primary hover:text-white animate-pulse 
+            hover:animate-none' onClick={()=> setOpenImgVid(prev=> !prev)}>
             <FaPlus size={20}/>
             </button>
 
@@ -234,12 +265,18 @@ function Message() {
           </div>
 
       {/** input/send messages   */}
-
-        <div>
+         <form className='h-full w-full flex gap-2' onSubmit={handleSendMessage}>
           <input type='text'
-            placeholder='Enter your message'
+            placeholder='Type here message...'
+            value={message.text}
+            onChange={handleOnchange}
+            className='py-1 px-4 outline-none w-full h-full'
           />
-        </div>
+
+          <button className='text-primary hover:text-secondary'>
+              <IoMdSend size={28}/>
+            </button>
+        </form>
 
        </section>
           

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { Link, useParams } from "react-router-dom"
 import Avatar from "./Avatar"
@@ -12,7 +12,7 @@ import { IoClose } from "react-icons/io5";
 import LoadingSpinner from "./LoadingSpinner"
 import backgroundImage from "../assets/bb.jpeg"
 import { IoMdSend } from "react-icons/io";
-
+import moment from "moment"
 
 function Message() {
    
@@ -34,6 +34,15 @@ function Message() {
   })
   const[loading,setLoading]=useState(false) 
   const[allMessage,setAllMessage]=useState([])
+
+  const currentmessage= useRef(null)
+   
+  useEffect(()=>{
+    if(currentmessage.current){
+      currentmessage.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    }
+  },[allMessage])
+
   
   const socketconnection= useSelector(state=> state?.user?.socketConnection)
 
@@ -173,10 +182,41 @@ function Message() {
       <section className='h-[calc(100vh-128px)] overflow-x-hidden overflow-y-scroll 
       scrollbar relative bg-slate-200 bg-opacity-70'>
            
-            {/**display image message */}
+        {/** all message shows here */}
+          
+           <div className='flex flex-col gap-2 py-2 mx-2'ref={currentmessage} >
+            {
+              allMessage.map((msg,index)=>(
+                <div key={index} className={`px-2 bg-white 
+                w-fit max-w-[280px] md:max-w-sm lg:max-w-md rounded ${user._id === msg.msgByUserId ? "ml-auto bg-teal-100" : "bg-purple-200"}`}>
+                  <div className='w-full '>
+                  {
+                    msg?.imageUrl && (
+                      <img src={msg?.imageUrl} alt='uploadedimage'
+                      className='w-full h-full object-scale-down'/> //"object-scale-down" uses If the image is smaller than the container, it will be displayed at its original size.
+                    )
+                  }
+          
+                  {
+                    msg?.videoUrl && (
+                      <video src={msg?.videoUrl} alt='uploadedvideo'
+                      controls
+                      className='w-full h-full object-scale-down'/> 
+                    )
+                  }
+                  </div>
+                  <p>{msg.text}</p>
+                  <p className='text-[10px] ml-auto w-fit'>{moment(msg.createdAt).format('LT')}</p>
+                </div>
+              ))
+            }
+           </div>
+
+
+                {/**display image message */}
         {
           message.imageUrl && (
-            <div className='w-full h-full bg-slate-700 bg-opacity-30 flex justify-center items-center rounded overflow-hidden'>
+            <div className='w-full h-full sticky bottom-0 bg-slate-700 bg-opacity-30 flex justify-center items-center rounded overflow-hidden'>
             <div className='w-fit p-2 absolute top-0 right-0 cursor-pointer hover:text-gray-100'
             onClick={handleClearuploadImg}>
               <IoClose size={30} className='hover:scale-125'/>
@@ -194,7 +234,7 @@ function Message() {
         {/**display video message */}
         {
           message.videoUrl && (
-            <div className='w-full h-full bg-slate-700 bg-opacity-30 flex justify-center items-center rounded overflow-hidden'>
+            <div className='w-full h-full sticky bottom-0 bg-slate-700 bg-opacity-30 flex justify-center items-center rounded overflow-hidden'>
             <div className='w-fit p-2 absolute top-0 right-0 cursor-pointer hover:text-gray-100'
             onClick={handleClearuploadVideo}>
               <IoClose size={30} className='hover:scale-125'/>
@@ -213,22 +253,11 @@ function Message() {
 
         {
           loading && (
-            <div className='w-full h-full flex justify-center items-center '>
+            <div className='w-full h-full sticky bottom-0 flex justify-center items-center '>
               <LoadingSpinner/>
             </div>
           )
         }
-
-
-        {/** all message shows here */}
-          
-           <div>
-            {
-              allMessage && (
-                
-              )
-            }
-           </div>
 
       </section>
        

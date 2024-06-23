@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { IoChatbubbleEllipses } from "react-icons/io5";
 import { FaUserPlus } from "react-icons/fa";
 import { NavLink } from 'react-router-dom';
@@ -17,6 +17,16 @@ export default function Sidebar() {
 
      const [alluser,setAllUser]=useState([])
      const [openSearchUser,setOpenSearch]=useState(false)
+     const socketconnection= useSelector(state=> state?.user?.socketConnection)
+     
+
+     useEffect(()=>{
+
+      if(socketconnection){
+        socketconnection.emit("sidebar",userDetails._id)
+      }
+        
+     },[socketconnection])
 
      
   return (

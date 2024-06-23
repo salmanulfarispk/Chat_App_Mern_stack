@@ -52,7 +52,19 @@ io.on("connection",async(socket)=>{
         }
 
         socket.emit('message-user',payload)
+
+         //get previous message
+         const getConversationMessage=await ConversationModel.findOne({
+            "$or":[
+                {sender : user?._id, receiver: userId},
+                {sender : userId, receiver: user?._id},
+
+            ]
+        }).populate("message").sort({updatedAt : -1}) 
+
+        socket.emit("message",getConversationMessage?.message || [])
      });
+
 
      //new messages
 
@@ -88,20 +100,24 @@ io.on("connection",async(socket)=>{
         const updateConversation=await ConversationModel.updateOne({_id: conversation._id},{
             "$push": {message : saveMessage._id}
         })
-
-        const getConversationMessage=await ConversationModel.findOne({
-            "$or":[
-                {sender : data?.sender, receiver: data?.receiver},
-                {sender : data?.receiver, receiver: data?.sender},
-
+        const getConversationMessage = await ConversationModel.findOne({
+            "$or" : [
+                { sender : data?.sender, receiver : data?.receiver },
+                { sender : data?.receiver, receiver :  data?.sender}
             ]
-        }).populate("message").sort({updatedAt : -1}) 
-           
-        
-        io.to(data?.sender).emit("message",getConversationMessage.message)
-        io.to(data?.receiver).emit("message",getConversationMessage.message)
+        }).populate('message').sort({ updatedAt : -1 })
+
+
+        io.to(data?.sender).emit('message',getConversationMessage?.message || [])
+        io.to(data?.receiver).emit('message',getConversationMessage?.message || [])
 
      });
+
+     //sidebar
+
+     socket.on("sidebar",(data)=>{
+        
+     })
 
 
     //disconnect

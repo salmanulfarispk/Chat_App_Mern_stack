@@ -26,7 +26,7 @@ export default function Sidebar() {
         socketconnection.emit("sidebar",userDetails._id)
       }
         
-     },[socketconnection])
+     },[socketconnection,userDetails])
 
      
   return (

@@ -115,8 +115,29 @@ io.on("connection",async(socket)=>{
 
      //sidebar
 
-     socket.on("sidebar",(data)=>{
-        
+     socket.on("sidebar",async(currentUserId)=>{
+            const currentUserConversation=await ConversationModel.find({
+                "$or":[
+                    {sender: currentUserId},
+                    {receiver: currentUserId}
+                ]
+            }).sort({ updateAt : -1 }).populate("message")
+
+            const conversation= currentUserConversation.map((conv)=>{
+                const countUnseenMsg = conv.message.reduce((prev, curr) => (
+                    prev + (curr.seen ? 0 : 1)
+                  ), 0);
+
+                return {
+                    _id: conv?._id,
+                    sender: conv?.sender,
+                    receiver: conv?.receiver,
+                    unseenMessg: countUnseenMsg,
+                    lastMsg: conv.message[conv?.message?.length -1]
+                }
+            })
+
+            socket.emit("conversation",conversation)
      })
 
 

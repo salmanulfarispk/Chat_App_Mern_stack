@@ -6,6 +6,7 @@ const  getUserFromUserDetails=require("../helpers/getUserDetailsFromToken")
 const UserModel = require("../models/UserModels")
 const ConversationModel= require("../models/ConversationModel")
 const MessageModel=require("../models/MessageModel")
+const getConversation = require("../helpers/getConversation")
 
 //socket connection
 
@@ -33,7 +34,7 @@ io.on("connection",async(socket)=>{
 
     //create a room 
   
-    socket.join(user?._id?.toString())
+    socket.join(user?._id.toString())
     onlineUser.add(user?._id?.toString())
    
     io.emit("onlineUser",Array.from(onlineUser))  //By using Array.from, the Set onlineUser is converted into an Array.
@@ -116,26 +117,8 @@ io.on("connection",async(socket)=>{
      //sidebar
 
      socket.on("sidebar",async(currentUserId)=>{
-            const currentUserConversation=await ConversationModel.find({
-                "$or":[
-                    {sender: currentUserId},
-                    {receiver: currentUserId}
-                ]
-            }).sort({ updateAt : -1 }).populate("message")
 
-            const conversation= currentUserConversation.map((conv)=>{
-                const countUnseenMsg = conv.message.reduce((prev, curr) => (
-                    prev + (curr.seen ? 0 : 1)
-                  ), 0);
-
-                return {
-                    _id: conv?._id,
-                    sender: conv?.sender,
-                    receiver: conv?.receiver,
-                    unseenMessg: countUnseenMsg,
-                    lastMsg: conv.message[conv?.message?.length -1]
-                }
-            })
+           const conversation = await getConversation(currentUserId)
 
             socket.emit("conversation",conversation)
      })

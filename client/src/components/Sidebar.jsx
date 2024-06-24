@@ -12,7 +12,7 @@ import SearchUser from './SearchUser';
 
 export default function Sidebar() {
    
-    const userDetails= useSelector(state=> state?.user)
+    const user= useSelector(state=> state?.user)
      const [editOpenUSer,setEditUserOpen]=useState(false)
 
      const [alluser,setAllUser]=useState([])
@@ -20,15 +20,43 @@ export default function Sidebar() {
      const socketconnection= useSelector(state=> state?.user?.socketConnection)
      
 
-     useEffect(()=>{
-
-      if(socketconnection){
-        socketconnection.emit("sidebar",userDetails._id)
+     useEffect(() => {
+      if (socketconnection) {
+          socketconnection.emit('sidebar', user._id);
+    
+          socketconnection.on('conversation', (data) => {
+    
+          const conversationUserData = data.map((conversationUser) => {
+            if (conversationUser?.sender?._id === conversationUser?.receiver?._id) {
+              return {
+                ...conversationUser,
+                userDetails: conversationUser?.sender
+              };
+            } else if (conversationUser?.receiver?._id !== user?._id) {
+              return {
+                ...conversationUser,
+                userDetails: conversationUser.receiver
+              };
+            } else {
+              return {
+                ...conversationUser,
+                userDetails: conversationUser.sender
+              };
+            }
+          });
+    
+          setAllUser(conversationUserData);
+        });
       }
-        
-     },[socketconnection,userDetails])
-
-     
+    
+      return () => {
+       
+        if (socketconnection) {
+          socketconnection.off('conversation');
+        }
+      };
+    }, [socketconnection, user]);
+    
   return (
     <div className='w-full h-full grid grid-cols-[48px,1fr] bg-white'>
          <div className='bg-slate-100 w-12 h-full rounded-tr-lg rounded-br-lg py-5 text-slate-600 flex flex-col justify-between'>
@@ -45,11 +73,11 @@ export default function Sidebar() {
                </div>
                    
                    <div className='flex flex-col items-center gap-2'>
-                        <button className='mx-auto' title={userDetails?.name} onClick={()=> setEditUserOpen(true)}>
+                        <button className='mx-auto' title={user?.name} onClick={()=> setEditUserOpen(true)}>
                             <Avatar width={38} height={38}
-                             name={userDetails?.name}
-                            image={userDetails?.profileImg}
-                            userId={userDetails?._id}
+                             name={user?.name}
+                            image={user?.profileImg}
+                            userId={user?._id}
                              /> 
                         </button>
 
@@ -79,13 +107,31 @@ export default function Sidebar() {
                   )
                  }
 
+                 {
+                  alluser.map((conv,index)=>(
+                    <div key={conv?._id}>
+                      <div>
+                        <Avatar 
+                         image={conv?.userDetails?.profileImg}
+                         name={conv?.userDetails?.name} 
+                         height={40} width={40}
+                        />
+                      </div>
+                      <div>
+                        <h3>{conv?.userDetails?.name}</h3>
+                        </div>
+                    </div>
+                  ))
+                  
+                 }
+
                </div>
 
            </div>
 
            {/**edit userdetail modal */}
           {editOpenUSer && (
-            <EditUserDetails onClose={()=> setEditUserOpen(false)} user={userDetails}/> 
+            <EditUserDetails onClose={()=> setEditUserOpen(false)} user={user}/> 
           )}
 
 

@@ -41,10 +41,12 @@ module.exports={
                 secure: true,
             }
 
-            return res.cookie("token","",CookieOption).status(200).json({    //here set token as ""
-                message:"session out ",
+            res.cookie("token", "", {
+                ...CookieOption,
+            }).status(200).json({
+                message: "Session logged out",
                 success: true
-            })
+            });
             
         } catch (error) {
          return res.status(500).json({

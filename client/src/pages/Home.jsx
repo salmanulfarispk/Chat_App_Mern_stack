@@ -40,6 +40,7 @@ export default function Home() {
               color: 'white',
               },
       }); 
+      
     }
    }
 
@@ -47,6 +48,11 @@ export default function Home() {
       fetchUserDetails()
    },[])
 
+   useEffect(() => {
+    if (!user._id) {
+      navigate('/emailpage'); 
+    }
+  }, [user._id,navigate]);
 
      //socket connection
      useEffect(()=>{
@@ -66,7 +72,7 @@ export default function Home() {
         return ()=>{
           socketconnection.disconnect()
         }
-     },[])
+     },[dispatch])
 
 
    const basePath= location.pathname === '/'

@@ -32,7 +32,18 @@ io.on("connection",async(socket)=> {
 
   //corrent user details
 
-  const user=  await getUserFromUserDetails(token)
+  let user;
+    try {
+        user = await getUserFromUserDetails(token);
+    } catch (error) {
+        console.error("Error getting user details from token:", error);
+        return socket.disconnect(true);
+    }
+
+    if (!user) {
+        console.error("Invalid user, disconnecting socket:", socket.id);
+        return socket.disconnect(true);
+    }
 
     //create a room 
   
@@ -132,40 +143,41 @@ io.on("connection",async(socket)=> {
             socket.emit("conversation",conversation)
      })
 
-     socket.on("seen",async(messageByUserId)=>{
-        let conversation= await ConversationModel.findOne({
-            "$or":[
-                {sender : user?._id, receiver: messageByUserId},
-                {sender : messageByUserId, receiver: user?._id},
+     //seen event
 
-            ]
+     socket.on("seen", async (messageByUserId) => {
+        const conversation = await ConversationModel.findOne({
+          "$or": [
+            { sender: user?._id, receiver: messageByUserId },
+            { sender: messageByUserId, receiver: user?._id },
+          ],
         });
-
-        const conversationMessageId = conversation.message || [];
-
-        const upadteMessage = await MessageModel.updateMany(
+    
+        if (conversation) {
+          const conversationMessageId = conversation.message || [];
+    
+          await MessageModel.updateMany(
             {
-                _id: {"$in" : conversationMessageId},
-                msgByUserId : messageByUserId
-            },{
-                "$set": { seen : true}
-            }
-        )
-
-        const conversationSender = await getConversation(user?._id?.toString())
-        const conversationReceiver = await getConversation(messageByUserId)
-
-        
-        io.to(user?._id?.toString()).emit('conversation',conversationSender)
-        io.to(messageByUserId).emit('conversation',conversationReceiver)
-
-     
-     })
+              _id: { "$in": conversationMessageId },
+              msgByUserId: messageByUserId,
+            },
+            { "$set": { seen: true } }
+          );
+    
+          const conversationSender = await getConversation(user?._id?.toString());
+          const conversationReceiver = await getConversation(messageByUserId);
+    
+          io.to(user?._id?.toString()).emit('conversation', conversationSender);
+          io.to(messageByUserId).emit('conversation', conversationReceiver);
+        } else {
+          console.error("Conversation not found");
+        }
+      });
 
 
     //disconnect
     socket.on("disconnect",()=>{
-        onlineUser.delete(user?._id)
+        onlineUser.delete(user?._id?.toString())
         console.log('disconnect user',socket.id);
     })
 })

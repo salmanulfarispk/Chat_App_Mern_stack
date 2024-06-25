@@ -190,8 +190,8 @@ function Message() {
            <div className='flex flex-col gap-2 py-2 mx-2'ref={currentmessage} >
             {
               allMessage.map((msg,index)=>(
-                <div key={index} className={`px-2 bg-white 
-                w-fit max-w-[280px] md:max-w-sm lg:max-w-md rounded ${user._id === msg.msgByUserId ? "ml-auto bg-teal-100" : "bg-purple-200"}`}>
+                <div key={index} className={`px-2 
+                w-fit max-w-[280px] md:max-w-sm lg:max-w-md rounded ${user._id === msg.msgByUserId ? "ml-auto bg-teal-100" : "bg-white"}`}>
                   <div className='w-full '>
                   {
                     msg?.imageUrl && (

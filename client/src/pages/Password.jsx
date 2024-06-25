@@ -19,7 +19,7 @@ export default function Password() {
         if(!location?.state?.name){
           navigate("/emailpage")        //even if we dont login and try to naviagte to password page ,it directly goes to email page
         }
-       },[])
+       },[location,navigate])
 
       const formik=useFormik({
         initialValues:{
@@ -60,14 +60,15 @@ export default function Password() {
                })
                 dispatch(setToken(res?.data?.token))  //when i pasword succes the token is stored in token in slice means store
                 localStorage.setItem("token",res?.data?.token)
+
                 formik.setValues({
                 password:""
                });
 
                navigate("/")
+
                }
-               
-              
+                
             } catch (error) {
               toast.error(error?.response?.data?.message || error.message,{
                 position: 'top-right',

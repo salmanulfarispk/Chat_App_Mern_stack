@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import { IoChatbubbleEllipses } from "react-icons/io5";
 import { FaUserPlus } from "react-icons/fa";
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { BiLogOut } from "react-icons/bi";
 import Avatar from "./Avatar"
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import EditUserDetails from './EditUserDetails';
 import { FiArrowUpLeft } from "react-icons/fi";
 import SearchUser from './SearchUser';
 import { FaImage } from "react-icons/fa6";
 import { MdVideoCameraBack } from "react-icons/md";
+import { logout } from '../redux/UserSlice';
 
 
 export default function Sidebar() {
@@ -20,7 +21,8 @@ export default function Sidebar() {
      const [alluser,setAllUser]=useState([])
      const [openSearchUser,setOpenSearch]=useState(false)
      const socketconnection= useSelector(state=> state?.user?.socketConnection)
-     
+     const dispatch=useDispatch()
+     const navigate=useNavigate()
 
      useEffect(() => {
       if (socketconnection) {
@@ -58,6 +60,13 @@ export default function Sidebar() {
         }
       };
     }, [socketconnection,user]);
+
+
+    const handleLogout=()=>{
+      dispatch(logout())
+      navigate("/emailpage")
+      localStorage.removeItem('token')
+    }
     
   return (
     <div className='w-full h-full grid grid-cols-[48px,1fr] bg-white'>
@@ -84,7 +93,7 @@ export default function Sidebar() {
                         </button>
 
                         <button title='logout' className='w-12 h-12 cursor-pointer flex justify-center items-center
-                         hover:bg-slate-200 rounded-sm'>
+                         hover:bg-slate-200 rounded-sm hover:scale-105' onClick={handleLogout}>
                           <span className='-ml-2'><BiLogOut size={20}/></span>
                        </button>
                    </div>

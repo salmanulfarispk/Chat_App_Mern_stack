@@ -45,7 +45,6 @@ export default function EmailPage() {
             formik.setValues({
               email:""
             });
-  
             navigate("/passwordpage",{
               state: response?.data?.data
             })

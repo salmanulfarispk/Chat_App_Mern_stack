@@ -28,10 +28,11 @@ export default function Avatar({userId,name,image,width,height}) {
         'bg-red-200',
         'bg-green-200',
         'bg-violet-200',
-        'bg-slate-200'
+        'bg-slate-200',
+        'bg-yellow-200'
      ]
 
-     const randomnum= Math.floor(Math.random() * 5)   //generates a random number between 0 and max(here5)
+     const randomnum= Math.floor(Math.random() * 6)   //generates a random number between 0 and max(here5)
 
 
      const isOnline = onlineUser.includes(userId) 

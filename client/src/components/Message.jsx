@@ -96,6 +96,7 @@ function Message() {
     if(!socketconnection) return ;
 
       socketconnection.emit("message-page",params.userId)
+      socketconnection.emit("seen",params.userId)
 
      socketconnection.on("message-user",(data)=>{
          setDataUser(data)
@@ -104,6 +105,8 @@ function Message() {
      socketconnection.on("message",(data)=>{
         setAllMessage(data)
      })
+
+  
 
      return () => {
       socketconnection.off('message-user', (data)=>{

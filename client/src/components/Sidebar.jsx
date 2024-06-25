@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { IoChatbubbleEllipses } from "react-icons/io5";
 import { FaUserPlus } from "react-icons/fa";
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { BiLogOut } from "react-icons/bi";
 import Avatar from "./Avatar"
 import { useSelector } from 'react-redux';
@@ -111,7 +111,7 @@ export default function Sidebar() {
 
                  {
                   alluser.map((conv,index)=>(
-                    <div key={conv?._id} className='flex items-center gap-2 py-3 px-2 border 
+                    <Link to={""+ conv?.userDetails?._id} key={conv?._id} className='flex items-center gap-2 py-3 px-2 border 
                     border-transparent hover:border-primary hover:bg-slate-100 hover:cursor-pointer'>
                       <div>
                         <Avatar 
@@ -141,12 +141,14 @@ export default function Sidebar() {
                                 )
                             }
                           </div>
-                          <p>{conv?.lastMsg?.text}</p>
+                          <p className='text-ellipsis line-clamp-1'>{conv?.lastMsg?.text}</p>
                         </div>
                       </div>
+                      {conv?.unseenMsg ? (
                       <p className='text-xs w-6 flex justify-center items-center h-6 ml-auto p-1 bg-primary
-                       text-white rounded-full font-semibold'>{conv?.unseenMsg}</p>
-                    </div>
+                       text-white rounded-full font-semibold'>{conv?.unseenMsg}</p>): ("")
+                      }
+                    </Link>
                   ))
                   
                  }

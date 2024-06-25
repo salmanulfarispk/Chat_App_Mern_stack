@@ -23,7 +23,9 @@ const onlineUser=new Set();  //used to create a new Set object. A Set is a colle
 
 //socket running on http://localhost:8080
 
-io.on("connection",async(socket)=>{
+io.on("connection",async(socket)=> {
+
+
   console.log("connected user",socket.id);  
 
   const token= socket.handshake.auth.token;
@@ -112,6 +114,14 @@ io.on("connection",async(socket)=>{
         io.to(data?.sender).emit('message',getConversationMessage?.message || [])
         io.to(data?.receiver).emit('message',getConversationMessage?.message || [])
 
+        //send conversation into sidebar
+        const conversationSender = await getConversation(data?.sender)
+        const conversationReceiver = await getConversation(data?.receiver)
+
+        
+        io.to(data?.sender).emit('conversation',conversationSender)
+        io.to(data?.receiver).emit('conversation',conversationReceiver)
+
      });
 
      //sidebar
@@ -119,8 +129,37 @@ io.on("connection",async(socket)=>{
      socket.on("sidebar",async(currentUserId)=>{
 
            const conversation = await getConversation(currentUserId)
-
             socket.emit("conversation",conversation)
+     })
+
+     socket.on("seen",async(messageByUserId)=>{
+        let conversation= await ConversationModel.findOne({
+            "$or":[
+                {sender : user?._id, receiver: messageByUserId},
+                {sender : messageByUserId, receiver: user?._id},
+
+            ]
+        });
+
+        const conversationMessageId = conversation.message || [];
+
+        const upadteMessage = await MessageModel.updateMany(
+            {
+                _id: {"$in" : conversationMessageId},
+                msgByUserId : messageByUserId
+            },{
+                "$set": { seen : true}
+            }
+        )
+
+        const conversationSender = await getConversation(user?._id?.toString())
+        const conversationReceiver = await getConversation(messageByUserId)
+
+        
+        io.to(user?._id?.toString()).emit('conversation',conversationSender)
+        io.to(messageByUserId).emit('conversation',conversationReceiver)
+
+     
      })
 
 

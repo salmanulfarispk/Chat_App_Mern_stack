@@ -66,6 +66,7 @@ export default function Sidebar() {
       dispatch(logout())
       navigate("/emailpage")
       localStorage.removeItem('token')
+      
     }
     
   return (

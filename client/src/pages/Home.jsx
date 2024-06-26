@@ -13,8 +13,6 @@ export default function Home() {
    const navigate=useNavigate()
    const dispatch=useDispatch()
    const location=useLocation()
-   const user=useSelector(state=> state.user)
-  //  console.log("userdetails",user);
 
    const fetchUserDetails= async()=>{
       const URL=`${import.meta.env.VITE_REACT_APP_BACKEND_URL}/api/user-details`
@@ -24,12 +22,13 @@ export default function Home() {
         withCredentials: true
       });
 
-        dispatch(setUser(response.data.data))
 
        if(response.data.data.logout){
         dispatch(logout())
         navigate("/emailpage")
-       }
+       }else {
+        dispatch(setUser(response.data.data));
+      }
            
     } catch (error) {
       console.log(error);
@@ -48,11 +47,6 @@ export default function Home() {
       fetchUserDetails()
    },[])
 
-   useEffect(() => {
-    if (!user._id) {
-      navigate('/emailpage'); 
-    }
-  }, [user._id,navigate]);
 
      //socket connection
      useEffect(()=>{

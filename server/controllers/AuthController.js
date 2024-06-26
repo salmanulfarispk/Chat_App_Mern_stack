@@ -110,6 +110,7 @@ verifypassword:async(req,res)=>{
         const CookieOption={     
             http: true,
             secure: true,
+            expires: new Date(Date.now() + 24 * 60 * 60 * 1000)
         }
 
         return res.cookie("token",token,CookieOption).status(200).json({  //token  stores in cokkie
